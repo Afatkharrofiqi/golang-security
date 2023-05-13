@@ -3,6 +3,7 @@ package middleware
 import (
 	"jwt-authentication-golang/auth"
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -15,6 +16,8 @@ func Auth() gin.HandlerFunc {
 			context.Abort()
 			return
 		}
+
+		tokenString = strings.Split(tokenString, "Bearer ")[1]
 
 		if err := auth.ValidateToken(tokenString); err != nil {
 			context.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
